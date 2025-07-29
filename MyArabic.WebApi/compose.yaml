@@ -1,0 +1,7 @@
+﻿services:
+  myarabic.webapi:
+    image: myarabic.webapi
+    build:
+      context: .
+      dockerfile: Dockerfile
+
