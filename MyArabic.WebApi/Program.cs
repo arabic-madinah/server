@@ -1,3 +1,4 @@
+using DotNetEnv.Configuration;
 using Microsoft.EntityFrameworkCore;
 using MyArabic.WebApi.DataAccess;
 using MyArabic.WebApi.Features.Chapters.CreateChapter;
@@ -9,7 +10,7 @@ using MyArabic.WebApi.Features.Lessons.GetLessonByIdOrSlug;
 using MyArabic.WebApi.Features.Lessons.UpdateLesson;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Configuration.AddDotNetEnv();
 builder.Services.AddOpenApi();
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
