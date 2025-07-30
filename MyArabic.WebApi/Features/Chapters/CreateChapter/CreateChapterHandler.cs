@@ -13,6 +13,15 @@ public class CreateChapterHandler(AppDbContext context)
         CreateChapterRequest request,
         CancellationToken cancellationToken)
     {
+        if (request.Title.Length is < 2 or > 100)
+        {
+            throw new ValidationException("Title must be between 2 and 100 characters.");
+        }
+        if (request.Slug.Length is < 3 or > 50)
+        {
+            throw new ValidationException("Slug must be between 3 and 50 characters.");
+        }
+        
         var existing = await context
             .Chapters
             .Where(x => x.Slug == request.Slug)
