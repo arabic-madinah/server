@@ -2,6 +2,8 @@
   myarabic.webapi:
     image: myarabic.webapi
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ./MyArabic.WebApi/
+      dockerfile: ../Dockerfile
+    environment:
+      - "CONNECTIONSTRINGS:DEFAULTCONNECTION=Host=${DB_HOST};Port=5432;Database=${DB_DATABASE};Username=${DB_USER};Password=${DB_PASSWORD}"
 
