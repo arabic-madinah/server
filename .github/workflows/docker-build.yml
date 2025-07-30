@@ -27,6 +27,6 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: MyArabic.WebApi/Dockerfile
+          file: Dockerfile
           push: true
           tags: ${{ secrets.REGISTRY_URL}}/my-arabic/server:latest
