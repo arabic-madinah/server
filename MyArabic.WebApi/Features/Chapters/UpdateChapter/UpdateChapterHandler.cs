@@ -8,11 +8,11 @@ namespace MyArabic.WebApi.Features.Chapters.UpdateChapter;
 public class UpdateChapterHandler(AppDbContext context)
 {
     private readonly ReOrderEntityRepository _repository = new (context);
-    
+
     public async Task<UpdateChapterResponse> UpdateChapterAsync(UpdateChapterRequest request,
         CancellationToken cancellationToken)
     {
-        var chapter = await 
+        var chapter = await
             context
             .Chapters
             .Where(x => x.Id == request.Id)
@@ -26,6 +26,7 @@ public class UpdateChapterHandler(AppDbContext context)
             var date = DateTime.UtcNow;
             chapter.Title = request.Title ?? chapter.Title;
             chapter.Slug = request.Slug ?? chapter.Slug;
+            chapter.Content = request.Content ?? chapter.Content;
             if (request.Order.HasValue)
                 chapter.Order = await _repository.ReOrderEntityAsync<Chapter>(request.Order, cancellationToken);
             chapter.UpdatedAt = date;
@@ -38,6 +39,7 @@ public class UpdateChapterHandler(AppDbContext context)
                 Title = chapter.Title,
                 Slug = chapter.Slug,
                 Order = chapter.Order,
+                Content = chapter.Content,
                 CreatedAt = chapter.CreatedAt,
                 UpdatedAt = date
             };

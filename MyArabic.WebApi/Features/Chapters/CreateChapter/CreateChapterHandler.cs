@@ -8,7 +8,7 @@ namespace MyArabic.WebApi.Features.Chapters.CreateChapter;
 public class CreateChapterHandler(AppDbContext context)
 {
     private readonly ReOrderEntityRepository _repository = new (context);
-    
+
     public async Task<CreateChapterResponse> CreateChapterAsync(
         CreateChapterRequest request,
         CancellationToken cancellationToken)
@@ -21,7 +21,7 @@ public class CreateChapterHandler(AppDbContext context)
         {
             throw new ValidationException("Slug must be between 3 and 50 characters.");
         }
-        
+
         var existing = await context
             .Chapters
             .Where(x => x.Slug == request.Slug)
@@ -30,12 +30,13 @@ public class CreateChapterHandler(AppDbContext context)
         {
             throw new ValidationException("Chapter with the same slug already exists.");
         }
-        
+
         var chapter = new Chapter
         {
             Id = Guid.NewGuid(),
             Title = request.Title,
             Slug = request.Slug,
+            Content = request.Content,
             Order = await _repository.ReOrderEntityAsync<Chapter>(request.Order, cancellationToken),
             CreatedAt = DateTime.UtcNow,
         };

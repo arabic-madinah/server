@@ -15,6 +15,7 @@ public class GetChapterByIdOrSlugHandler(AppDbContext context)
                 Id = c.Id,
                 Title = c.Title,
                 Slug = c.Slug,
+                Content = c.Content,
                 Order = c.Order,
                 CreatedAt = c.CreatedAt,
                 UpdatedAt = c.UpdatedAt,
