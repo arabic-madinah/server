@@ -8,6 +8,7 @@ using MyArabic.WebApi.Features.Chapters.UpdateChapter;
 using MyArabic.WebApi.Features.Lessons.CreateLesson;
 using MyArabic.WebApi.Features.Lessons.GetLessonByIdOrSlug;
 using MyArabic.WebApi.Features.Lessons.UpdateLesson;
+using MyArabic.WebApi.Features.Reorder;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddDotNetEnv();
@@ -90,5 +91,12 @@ app.MapPatch("/api/lessons/{id:guid}",
         var lesson = await handler.UpdateLessonAsync(request, cancellationToken);
         return Results.Ok(lesson);
     });
+
+app.MapPost("/api/reorder", async (AppDbContext db, ReorderChaptersWithLessonsRequest request, CancellationToken cancellationToken) =>
+{
+    var handler = new ReorderChaptersWithLessonsHandler(db);
+    await handler.ReorderChaptersWithLessonsAsync(request, cancellationToken);
+    return Results.NoContent();
+});
 
 app.Run();
