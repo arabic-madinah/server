@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".dockerignore" />
+    <File Path=".github/workflows/docker-build.yml" />
+    <File Path="compose.yaml" />
+    <File Path="Dockerfile" />
+  </Folder>
+  <Project Path="MyArabic.Tests\MyArabic.Tests.csproj" Type="Classic C#" />
+  <Project Path="MyArabic.WebApi/MyArabic.WebApi.csproj" />
+</Solution>

@@ -2,17 +2,22 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 using MyArabic.WebApi.DataAccess;
 using MyArabic.WebApi.Models;
+using MyArabic.WebApi.Validators;
 
 namespace MyArabic.WebApi.Features.Lessons.CreateLesson;
 
 public class CreateLessonHandler(AppDbContext context)
 {
     private readonly ReOrderEntityRepository _repository = new(context);
-    
+
     public async Task<CreateLessonResponse> CreateLessonAsync(
         CreateLessonRequest request,
         CancellationToken cancellationToken)
     {
+        if (!SlugValidator.Validate(request.Slug))
+        {
+            throw new ValidationException("Slug is not valid. It must be lowercase, alphanumeric, and can contain dashes.");
+        }
         var existing = await context
             .Lessons
             .AnyAsync(l => l.Slug == request.Slug, cancellationToken);
@@ -20,7 +25,7 @@ public class CreateLessonHandler(AppDbContext context)
         {
             throw new ValidationException($"Lesson with slug '{request.Slug}' already exists");
         }
-        
+
         var lesson = new Lesson
         {
             Id = Guid.NewGuid(),

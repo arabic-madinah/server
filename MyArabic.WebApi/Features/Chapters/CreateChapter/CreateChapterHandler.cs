@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 using MyArabic.WebApi.DataAccess;
 using MyArabic.WebApi.Models;
+using MyArabic.WebApi.Validators;
 
 namespace MyArabic.WebApi.Features.Chapters.CreateChapter;
 
@@ -20,6 +21,10 @@ public class CreateChapterHandler(AppDbContext context)
         if (request.Slug.Length is < 3 or > 50)
         {
             throw new ValidationException("Slug must be between 3 and 50 characters.");
+        }
+        if (!SlugValidator.Validate(request.Slug))
+        {
+            throw new ValidationException("Slug is not valid. It must be lowercase, alphanumeric, and can contain dashes.");
         }
 
         var existing = await context
