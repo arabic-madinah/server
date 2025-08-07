@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using MyArabic.WebApi.DataAccess;
 using MyArabic.WebApi.Exceptions;
 using MyArabic.WebApi.Models;
+using MyArabic.WebApi.Validators;
+using System.ComponentModel.DataAnnotations;
 
 namespace MyArabic.WebApi.Features.Lessons.UpdateLesson;
 
@@ -13,6 +15,10 @@ public class UpdateLessonHandler(AppDbContext context)
         UpdateLessonRequest request,
         CancellationToken cancellationToken)
     {
+        if (!string.IsNullOrWhiteSpace(request.Slug) && !SlugValidator.Validate(request.Slug))
+        {
+            throw new ValidationException("Slug is not valid. It must be lowercase, alphanumeric, and can contain dashes.");
+        }
         var lesson = await context
             .Lessons
             .Where(x => x.Id == request.Id)
@@ -34,7 +40,7 @@ public class UpdateLessonHandler(AppDbContext context)
             lesson.Content = request.Content ?? lesson.Content;
             lesson.UpdatedAt = date;
             await context.SaveChangesAsync(cancellationToken);
-            
+
             await transaction.CommitAsync(cancellationToken);
 
             return new UpdateLessonResponse
@@ -53,6 +59,6 @@ public class UpdateLessonHandler(AppDbContext context)
             await transaction.RollbackAsync(cancellationToken);
             throw;
         }
-        
+
     }
 }

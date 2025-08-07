@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using MyArabic.WebApi.DataAccess;
 using MyArabic.WebApi.Exceptions;
 using MyArabic.WebApi.Models;
+using MyArabic.WebApi.Validators;
+using System.ComponentModel.DataAnnotations;
 
 namespace MyArabic.WebApi.Features.Chapters.UpdateChapter;
 
@@ -12,6 +14,11 @@ public class UpdateChapterHandler(AppDbContext context)
     public async Task<UpdateChapterResponse> UpdateChapterAsync(UpdateChapterRequest request,
         CancellationToken cancellationToken)
     {
+        if (!string.IsNullOrWhiteSpace(request.Slug) && !SlugValidator.Validate(request.Slug))
+        {
+            throw new ValidationException("Slug is not valid. It must be lowercase, alphanumeric, and can contain dashes.");
+        }
+
         var chapter = await
             context
             .Chapters
